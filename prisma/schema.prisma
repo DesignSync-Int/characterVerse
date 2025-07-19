@@ -1,0 +1,265 @@
+// CharacterVerse Database Schema
+// A comprehensive schema for character rating and ranking platform
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Authentication and User Management
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  username      String?   @unique
+  bio           String?
+  joinedAt      DateTime  @default(now())
+  isVerified    Boolean   @default(false)
+  role          UserRole  @default(USER)
+
+  // Relations
+  accounts Account[]
+  sessions Session[]
+  ratings  Rating[]
+  reviews  Review[]
+  lists    CharacterList[]
+  likes    Like[]
+  follows  Follow[] @relation("UserFollows")
+  followers Follow[] @relation("UserFollowers")
+
+  @@map("users")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// Core Character Models
+model Universe {
+  id          String      @id @default(cuid())
+  name        String      @unique
+  description String?
+  type        UniverseType
+  imageUrl    String?
+  slug        String      @unique
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  characters Character[]
+
+  @@map("universes")
+}
+
+model Character {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  imageUrl    String?
+  universeId  String
+  species     String?
+  occupation  String?
+  powers      String? // JSON string of powers/abilities
+  aliases     String? // JSON string of alternative names
+  firstAppearance String?
+  creator     String?
+  status      CharacterStatus @default(ACTIVE)
+  
+  // AI-generated fields
+  aiDescription String?
+  personalityVector String? // JSON string for vector similarity search
+  
+  // Aggregated ratings (calculated fields)
+  avgPersonality Float @default(0)
+  avgPowers      Float @default(0)
+  avgWeaknesses  Float @default(0)
+  avgOrigin      Float @default(0)
+  avgImpact      Float @default(0)
+  overallRating  Float @default(0)
+  totalRatings   Int   @default(0)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  universe Universe @relation(fields: [universeId], references: [id])
+  ratings  Rating[]
+  reviews  Review[]
+  characterLists CharacterListItem[]
+
+  @@map("characters")
+}
+
+// Rating System
+model Rating {
+  id           String   @id @default(cuid())
+  userId       String
+  characterId  String
+  
+  // The 5 core rating categories (1-10 scale)
+  personality  Int      // Personality & Traits
+  powers       Int      // Powers & Abilities  
+  weaknesses   Int      // Weaknesses & Flaws
+  origin       Int      // Origin & Backstory
+  impact       Int      // Role & Impact
+  
+  overall      Float    // Calculated average
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  character Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, characterId]) // One rating per user per character
+  @@map("ratings")
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  userId      String
+  characterId String
+  title       String?
+  content     String
+  isRecommended Boolean?
+  helpfulCount Int     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  character Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}
+
+// Community Features
+model CharacterList {
+  id          String   @id @default(cuid())
+  userId      String
+  title       String
+  description String?
+  isPublic    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user  User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items CharacterListItem[]
+
+  @@map("character_lists")
+}
+
+model CharacterListItem {
+  id        String @id @default(cuid())
+  listId    String
+  characterId String
+  order     Int
+  note      String?
+
+  // Relations
+  list      CharacterList @relation(fields: [listId], references: [id], onDelete: Cascade)
+  character Character     @relation(fields: [characterId], references: [id], onDelete: Cascade)
+
+  @@unique([listId, characterId])
+  @@map("character_list_items")
+}
+
+model Like {
+  id        String    @id @default(cuid())
+  userId    String
+  targetId  String    // Can be reviewId, listId, etc.
+  targetType LikeType
+  createdAt DateTime  @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, targetId, targetType])
+  @@map("likes")
+}
+
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  // Relations
+  follower  User @relation("UserFollows", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("UserFollowers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@map("follows")
+}
+
+// Enums
+enum UserRole {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+enum UniverseType {
+  COMICS
+  ANIME
+  MOVIES
+  TV_SHOWS
+  GAMES
+  MYTHOLOGY
+  BOOKS
+  OTHER
+}
+
+enum CharacterStatus {
+  ACTIVE
+  INACTIVE
+  PENDING_REVIEW
+}
+
+enum LikeType {
+  REVIEW
+  LIST
+  CHARACTER
+}
