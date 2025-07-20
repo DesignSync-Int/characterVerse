@@ -1,9 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Production optimizations
+  compress: true,
+  poweredByHeader: false,
+
+  // Enable experimental features for better performance
+  experimental: {
+    optimizeCss: true,
+    serverComponentsExternalPackages: ["@prisma/client"],
+  },
+
   images: {
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    formats: ["image/webp", "image/avif"],
+    minimumCacheTTL: 60,
     remotePatterns: [
       {
         protocol: "https",

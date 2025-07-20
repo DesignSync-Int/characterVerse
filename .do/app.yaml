@@ -1,0 +1,39 @@
+name: characterverse
+services:
+- name: web
+  source_dir: /
+  github:
+    repo: kumasachin/characterVerse
+    branch: main
+  run_command: npm start
+  build_command: npm run build && npx prisma generate && npx prisma migrate deploy
+  environment_slug: node-js
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  envs:
+  - key: NODE_ENV
+    value: production
+  - key: NEXTAUTH_SECRET
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+  - key: NEXTAUTH_URL
+    value: ${APP_URL}
+    scope: RUN_AND_BUILD_TIME
+  - key: DATABASE_URL
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+  - key: UNSPLASH_ACCESS_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+  - key: PIXABAY_API_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+  - key: PEXELS_API_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+
+databases:
+- name: characterverse-db
+  engine: PG
+  version: "15"
+  production: true
