@@ -1,57 +1,52 @@
 import Link from 'next/link'
 import { Star } from 'lucide-react'
+import { CharacterImage } from "@/components/ui/character-image";
 
 // Sample characters for demo
 const FEATURED_CHARACTERS = [
   {
-    id: '1',
-    name: 'Spider-Man',
-    universe: 'Marvel Comics',
-    imageUrl: '/placeholder-character.jpg',
+    id: "1",
+    name: "Spider-Man",
+    universe: "Marvel Comics",
     overallRating: 8.7,
-    totalRatings: 1250
+    totalRatings: 1250,
   },
   {
-    id: '2',
-    name: 'Goku',
-    universe: 'Dragon Ball',
-    imageUrl: '/placeholder-character.jpg',
+    id: "2",
+    name: "Goku",
+    universe: "Dragon Ball",
     overallRating: 9.2,
-    totalRatings: 2180
+    totalRatings: 2180,
   },
   {
-    id: '3',
-    name: 'Batman',
-    universe: 'DC Comics',
-    imageUrl: '/placeholder-character.jpg',
+    id: "3",
+    name: "Batman",
+    universe: "DC Comics",
     overallRating: 8.9,
-    totalRatings: 1876
+    totalRatings: 1876,
   },
   {
-    id: '4',
-    name: 'Naruto',
-    universe: 'Naruto',
-    imageUrl: '/placeholder-character.jpg',
+    id: "4",
+    name: "Naruto",
+    universe: "Naruto",
     overallRating: 8.5,
-    totalRatings: 1654
+    totalRatings: 1654,
   },
   {
-    id: '5',
-    name: 'Wonder Woman',
-    universe: 'DC Comics',
-    imageUrl: '/placeholder-character.jpg',
+    id: "5",
+    name: "Wonder Woman",
+    universe: "DC Comics",
     overallRating: 8.3,
-    totalRatings: 987
+    totalRatings: 987,
   },
   {
-    id: '6',
-    name: 'Luffy',
-    universe: 'One Piece',
-    imageUrl: '/placeholder-character.jpg',
+    id: "6",
+    name: "Luffy",
+    universe: "One Piece",
     overallRating: 8.8,
-    totalRatings: 1432
-  }
-]
+    totalRatings: 1432,
+  },
+];
 
 export function FeaturedCharacters() {
   const getRatingColor = (rating: number) => {
@@ -68,7 +63,8 @@ export function FeaturedCharacters() {
             Trending Characters
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Discover the most popular and highly-rated characters across all universes.
+            Discover the most popular and highly-rated characters across all
+            universes.
           </p>
         </div>
 
@@ -79,20 +75,24 @@ export function FeaturedCharacters() {
               href={`/characters/${character.id}`}
               className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden group"
             >
-              <div className="aspect-[4/3] bg-gradient-to-br from-slate-100 to-slate-200 relative">
-                {/* Placeholder for character image */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-slate-400 text-center">
-                    <div className="w-16 h-16 bg-slate-300 rounded-full mx-auto mb-2 flex items-center justify-center">
-                      <span className="text-2xl">👤</span>
-                    </div>
-                    <span className="text-sm">Character Image</span>
-                  </div>
-                </div>
-                
+              <div className="aspect-[4/3] bg-gradient-to-br from-slate-100 to-slate-200 relative overflow-hidden">
+                <CharacterImage
+                  character={{
+                    name: character.name,
+                    universe: character.universe,
+                  }}
+                  size="md"
+                  showAttribution={false}
+                  className="w-full h-full object-cover"
+                />
+
                 {/* Rating overlay */}
                 <div className="absolute top-3 right-3">
-                  <div className={`px-2 py-1 rounded-full text-sm font-medium ${getRatingColor(character.overallRating)}`}>
+                  <div
+                    className={`px-2 py-1 rounded-full text-sm font-medium ${getRatingColor(
+                      character.overallRating
+                    )}`}
+                  >
                     ⭐ {character.overallRating}
                   </div>
                 </div>
@@ -103,7 +103,7 @@ export function FeaturedCharacters() {
                   {character.name}
                 </h3>
                 <p className="text-slate-600 mb-4">{character.universe}</p>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center text-sm text-slate-500">
                     <Star className="h-4 w-4 mr-1" />
@@ -128,5 +128,5 @@ export function FeaturedCharacters() {
         </div>
       </div>
     </section>
-  )
+  );
 }

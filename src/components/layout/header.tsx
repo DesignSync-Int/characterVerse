@@ -15,25 +15,39 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
+          <Link href="/characters" className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">CV</span>
             </div>
-            <span className="text-xl font-bold text-slate-900">CharacterVerse</span>
+            <span className="text-xl font-bold text-slate-900">
+              CharacterVerse
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/characters" className="text-slate-600 hover:text-slate-900 transition-colors">
+            <Link
+              href="/characters"
+              className="text-purple-600 hover:text-purple-700 transition-colors font-semibold"
+            >
               Characters
             </Link>
-            <Link href="/universes" className="text-slate-600 hover:text-slate-900 transition-colors">
+            <Link
+              href="/universes"
+              className="text-slate-600 hover:text-slate-900 transition-colors"
+            >
               Universes
             </Link>
-            <Link href="/rankings" className="text-slate-600 hover:text-slate-900 transition-colors">
+            <Link
+              href="/rankings"
+              className="text-slate-600 hover:text-slate-900 transition-colors"
+            >
               Rankings
             </Link>
-            <Link href="/lists" className="text-slate-600 hover:text-slate-900 transition-colors">
+            <Link
+              href="/lists"
+              className="text-slate-600 hover:text-slate-900 transition-colors"
+            >
               Lists
             </Link>
           </nav>
@@ -110,16 +124,28 @@ export function Header() {
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-slate-200 py-4">
             <div className="flex flex-col space-y-4">
-              <Link href="/characters" className="text-slate-600 hover:text-slate-900">
+              <Link
+                href="/characters"
+                className="text-slate-600 hover:text-slate-900"
+              >
                 Characters
               </Link>
-              <Link href="/universes" className="text-slate-600 hover:text-slate-900">
+              <Link
+                href="/universes"
+                className="text-slate-600 hover:text-slate-900"
+              >
                 Universes
               </Link>
-              <Link href="/rankings" className="text-slate-600 hover:text-slate-900">
+              <Link
+                href="/rankings"
+                className="text-slate-600 hover:text-slate-900"
+              >
                 Rankings
               </Link>
-              <Link href="/lists" className="text-slate-600 hover:text-slate-900">
+              <Link
+                href="/lists"
+                className="text-slate-600 hover:text-slate-900"
+              >
                 Lists
               </Link>
               <div className="pt-4 border-t border-slate-200">
@@ -137,5 +163,5 @@ export function Header() {
         )}
       </div>
     </header>
-  )
+  );
 }
