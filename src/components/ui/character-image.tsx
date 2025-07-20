@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { ImageIcon, Info } from 'lucide-react'
-import { CharacterImageService, ImageSource } from '@/lib/image-service'
+import { CharacterImageService } from "@/lib/image-service";
+import { LegalImageService } from "@/lib/legal-image-service";
 
 interface CharacterImageProps {
   character: {
