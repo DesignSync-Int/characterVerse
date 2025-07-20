@@ -4,23 +4,27 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const character = await prisma.character.findUnique({
-      where: { id: params.id },
-      include: { universe: true }
-    })
+      where: { id },
+      include: { universe: true },
+    });
 
     if (!character) {
-      return NextResponse.json({ error: 'Character not found' }, { status: 404 })
+      return NextResponse.json(
+        { error: "Character not found" },
+        { status: 404 }
+      );
     }
 
     // Search for available images
     const imageOptions = await CharacterImageService.searchCharacterImages(
       character.name,
       character.universe.name
-    )
+    );
 
     return NextResponse.json({
       character: {
@@ -29,38 +33,42 @@ export async function GET(
         currentImage: character.imageUrl,
         imageSource: character.imageSource,
         imageLicense: character.imageLicense,
-        imageAttribution: character.imageAttribution
+        imageAttribution: character.imageAttribution,
       },
-      imageOptions
-    })
+      imageOptions,
+    });
   } catch (error) {
-    console.error('Error fetching character images:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    console.error("Error fetching character images:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { imageUrl, source, license, attribution } = await request.json()
+    const { id } = await params;
+    const { imageUrl, source, license, attribution } = await request.json();
 
     // Validate the image URL
     if (imageUrl && !(await CharacterImageService.validateImageUrl(imageUrl))) {
-      return NextResponse.json({ error: 'Invalid image URL' }, { status: 400 })
+      return NextResponse.json({ error: "Invalid image URL" }, { status: 400 });
     }
 
     const updatedCharacter = await prisma.character.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         imageUrl,
         imageSource: source,
         imageLicense: license,
         imageAttribution: attribution,
-        updatedAt: new Date()
-      }
-    })
+        updatedAt: new Date(),
+      },
+    });
 
     return NextResponse.json({
       success: true,
@@ -68,11 +76,14 @@ export async function POST(
         id: updatedCharacter.id,
         imageUrl: updatedCharacter.imageUrl,
         imageSource: updatedCharacter.imageSource,
-        imageLicense: updatedCharacter.imageLicense
-      }
-    })
+        imageLicense: updatedCharacter.imageLicense,
+      },
+    });
   } catch (error) {
-    console.error('Error updating character image:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    console.error("Error updating character image:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

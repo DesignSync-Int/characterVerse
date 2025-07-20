@@ -8,37 +8,38 @@ import { RATING_CATEGORIES, getRatingColor } from '@/lib/rating-utils'
 import Image from 'next/image'
 
 interface CharacterPageProps {
-  params: {
-    slug: string
-  }
+  params: Promise<{
+    slug: string;
+  }>;
 }
 
 export default async function CharacterPage({ params }: CharacterPageProps) {
+  const { slug } = await params;
   const character = await prisma.character.findUnique({
-    where: { slug: params.slug },
+    where: { slug },
     include: {
       universe: true,
       ratings: {
         include: {
-          user: true
-        }
+          user: true,
+        },
       },
       reviews: {
         include: {
-          user: true
+          user: true,
         },
         orderBy: {
-          createdAt: 'desc'
-        }
+          createdAt: "desc",
+        },
       },
       _count: {
         select: {
           ratings: true,
-          reviews: true
-        }
-      }
-    }
-  })
+          reviews: true,
+        },
+      },
+    },
+  });
 
   if (!character) {
     notFound()

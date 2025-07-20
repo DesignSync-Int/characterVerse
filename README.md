@@ -2,16 +2,16 @@
 
 **The ultimate platform for rating and discovering fictional characters across all universes.**
 
-Like IMDb for characters — enhanced with AI, gamification, and community interaction.
+A comprehensive character rating platform with community features and personalized recommendations.
 
 ## 🎯 Project Overview
 
-CharacterVerse is a comprehensive character rating and ranking platform for fictional characters from comics, anime, movies, TV shows, games, and mythology. Users can rate characters across five detailed categories, discover new favorites through AI-powered recommendations, and engage with a vibrant community of fans.
+CharacterVerse is a comprehensive character rating and ranking platform for fictional characters from comics, anime, movies, TV shows, games, and mythology. Users can rate characters across five detailed categories, discover new favorites through personalized recommendations, and engage with a vibrant community of fans.
 
 ### Key Features
 
 - **5-Category Rating System**: Rate characters on Personality, Powers, Weaknesses, Origin, and Impact
-- **AI-Powered Recommendations**: Get personalized character suggestions based on your ratings
+- **Personalized Recommendations**: Get character suggestions based on your ratings and preferences
 - **Community Features**: Create lists, write reviews, follow other users
 - **Comprehensive Database**: Characters from Marvel, DC, Anime, Games, Movies, and more
 - **Progressive Web App**: Full mobile experience with offline capabilities
@@ -20,7 +20,7 @@ CharacterVerse is a comprehensive character rating and ranking platform for fict
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **Next.js 14** with App Router for modern React development
+- **Next.js 15** with App Router for modern React development
 - **TypeScript** for type safety
 - **TailwindCSS** for responsive styling
 - **Lucide React** for icons
@@ -32,15 +32,15 @@ CharacterVerse is a comprehensive character rating and ranking platform for fict
 - **SQLite** (development) / **PostgreSQL** (production)
 - **NextAuth.js** for authentication
 
-### AI & ML Integration
-- **OpenAI GPT** for character descriptions and recommendations
-- **Vector Search** (Pinecone/FAISS) for character similarity matching
-- **Sentiment Analysis** for review processing
+### Features & Analysis
+- **Image Integration** with commercial-safe APIs (Unsplash, Pixabay, Pexels)
+- **Character Search** and filtering
+- **Review Processing** and community interaction
 
 ### Deployment & Infrastructure
-- **Vercel** for frontend hosting
+- **Vercel/Render** for hosting
 - **Database**: PostgreSQL on production
-- **CDN**: Cloudflare for global content delivery
+- **CDN**: Image optimization and delivery
 
 ## 🚀 Getting Started
 
@@ -139,13 +139,8 @@ src/
 - [ ] User following system
 - [ ] Community rankings
 
-### Phase 3: AI Integration 🔄
-- [ ] AI character recommendations
-- [ ] Automated character descriptions
-- [ ] Personality analysis
-- [ ] Similarity matching
-
-### Phase 4: Advanced Features 🔄
+### Phase 3: Advanced Features 🔄
+- [ ] Enhanced character recommendations
 - [ ] Character battles/comparisons
 - [ ] Achievement system
 - [ ] Mobile app (React Native)

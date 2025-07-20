@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server'
-import { LegalImageService } from '@/lib/legal-image-service'
+import { CommercialImageService } from "@/lib/commercial-image-service";
 
 export async function POST() {
   try {
     console.log('🖼️  Starting character image updates...')
     
-    const stats = await LegalImageService.updateAllCharacterImages()
+    const stats = await CommercialImageService.updateAllCharactersCommercial();
     
     return NextResponse.json({
       success: true,
