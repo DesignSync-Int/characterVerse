@@ -7,8 +7,10 @@ const nextConfig = {
   // Enable experimental features for better performance
   experimental: {
     optimizeCss: true,
-    serverComponentsExternalPackages: ["@prisma/client"],
   },
+
+  // Server external packages
+  serverExternalPackages: ["@prisma/client"],
 
   images: {
     dangerouslyAllowSVG: true,
