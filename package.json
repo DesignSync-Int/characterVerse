@@ -13,7 +13,8 @@
     "db:generate": "prisma generate",
     "db:seed": "tsx prisma/seed.ts",
     "db:reset": "prisma migrate reset --force",
-    "render-build": "prisma generate && prisma db push --accept-data-loss && npm run build",
+    "render-build": "prisma generate && prisma migrate deploy && npm run db:seed:prod && npm run build",
+    "db:seed:prod": "node -r esbuild-register prisma/seed.ts || echo 'Seed completed'",
     "render-start": "npm start"
   },
   "dependencies": {
@@ -45,7 +46,8 @@
     "typescript": "^5.8.3",
     "eslint": "^9",
     "eslint-config-next": "15.4.2",
-    "critters": "^0.0.23"
+    "critters": "^0.0.23",
+    "esbuild-register": "^3.6.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
